@@ -1,0 +1,40 @@
+header {
+    background-color: rgb(151, 150, 150);
+    margin-bottom: 10px; 
+}
+
+.black {
+    color: black;
+}
+
+.center {
+    max-width: 1100px;
+    margin: auto;
+    align-items: center;
+}
+.main {
+    max-width: 1000px;
+    padding: 15px 25px;
+    background-color: rgb(196, 196, 196);
+    margin: auto;
+}
+
+.red {
+    color: rgba(255, 0, 0, 0.664);
+}
+
+.space {
+    margin-bottom: 20px;
+}
+
+.thumbnail {
+    max-width: 200px;
+}
+
+.links {
+    padding: 4px!important;
+}
+
+span {
+    color: green;
+}

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/jims_store.css' %}">
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/start/jquery-ui.css'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
+    <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+
+    <script>
+
+        $(document).ready(function () {
+
+            var navbar = document.getElementById("navbar");
+
+            window.onscroll = function () {
+                if ($(document).scrollTop() > 30) {
+                    navbar.classList.add("shrink")
+                    $("#title").hide("blind", 1000);
+                } else {
+                    navbar.classList.remove("shrink");
+                    $("#title").show("blind", 500);
+                }
+            }
+
+            var forms = document.getElementsByClassName('needs-validation');
+
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        });
+
+    </script>
+
+</head>
+
+<body>
+    <header id="navbar">
+        <div class="container">
+            <h1 id="title">Jim's Store</h1>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="/">
+                    <img src="../static/store/pics/tent.png" alt="Tent Pic">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/products">Home<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login_page">Log In</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                The Store
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/contact">Shipping Rates</a>
+                                <a class="dropdown-item" href="/contact">About Us</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/contact">Contact Us</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/cart">Cart</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="container article">
+        <div class="sideWidth">
+            <div class="sideBar notOnTablet grayBackground">
+                <h6>What are you looking for?</h6>
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <h6>Filter Search by Catagory:</h6>
+                <form class="searchForm" action="#">
+                    <input type="checkbox" name="tents"> Tents<br>
+                    <input type="checkbox" name="clothing"> Clothing<br>
+                    <input type="checkbox" name="boots"> Boots <br>
+                    <input type="checkbox" name="backpacks"> Backpacks<br>
+                    <input type="checkbox" name="cookWare"> Cookware<br>
+                    <input type="checkbox" name="stoves"> Stoves<br>
+                    <input type="checkbox" name="packagedFood"> Packaged food<br>
+                    <input type="checkbox" name="sleepingBag"> Sleeping Bags<br>
+                    <input type="checkbox" name="cots"> Cots<br>
+                    <input type="checkbox" name="bikes"> Bikes<br>
+                    <input type="checkbox" name="kayak"> Kayaks<br>
+                    <h6>Filter by Brand:</h6>
+                    <select name="brand" id="brand">
+                        <option selected>All Brands</option>
+                        <option>Black Diamond</option>
+                        <option>Coleman</option>
+                        <option>DMM</option>
+                        <option>Garmont</option>
+                        <option>Granite Gear</option>
+                        <option>Hydro Flask</option>
+                        <option>La Sportiva</option>
+                        <option>Marmot</option>
+                        <option>Osprey</option>
+                        <option>The North Face</option>
+                        <option>Therm-a-Rest</option>
+                    </select>
+                    <input type="submit" value="Apply">
+                </form>
+            </div>
+        </div>
+        <div class="container content fullOnTablet">
+            <div class="row">
+                <div class="titleRow grayBackground">
+                    <h3 class="col-md">Your Cart&#8595;</h3>
+                    <input class="form-control mr-sm-2 smallDevices fullOnTablet" type="search" placeholder="Search" aria-label="Search">
+                </div>
+            </div>
+            <div class="row grayBackground noPadOrMarginForPhones">
+                <div class="col-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Item Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="google.com">Some Product</a></td>
+                                <td>$23.50</td>
+                                <td>1</td>
+                                <td>$(p*qty)</td>
+                            </tr>
+                            <tr>
+                                <td><a href="google.com">Some Other Product</a></td>
+                                <td>$80.00</td>
+                                <td>4</td>
+                                <td>$(^+p*qty)</td>
+                            </tr>
+                            <tr>
+                                <td><a href="google.com">Some Third Product</a></td>
+                                <td>$41.73</td>
+                                <td>1</td>
+                                <td>$(^+p*qty)</td>
+                            </tr>
+                            <tr>
+                                <td><a href="google.com">You guessed it, a Product</a></td>
+                                <td>$987.95</td>
+                                <td>17</td>
+                                <td>$(^+p*qty)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-11">
+                    <h6>Pre-Tax Total: $^</h6>
+                    <h6>Tax: (^*.0925)%</h6>
+                    <h5>Total: $(total+tax)</h5>
+                </div>
+
+            </div>
+            <div class="btn-col">
+                <button type="button" class="btn btn-success continue">Continue Shopping</button>
+            </div>
+            <div class="row">
+                <div class="titleRow grayBackground">
+                    <h3 class="col-md">Checkout:</h3>
+                </div>
+            </div>
+            <div class="row grayBackground">
+                <div class="row center">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Email</label>
+                                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Password</label>
+                                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                            </div>
+                        </div>
+                    </form>
+                    <button type="submit" class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                        aria-controls="collapseExample">
+                        Log In
+                    </button>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                        aria-controls="collapseExample">
+                        Continue as Guest
+                    </button>
+                </div>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <form class="needs-validation" novalidate>
+                            <h4>Shipping Information:</h4>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail2">Email</label>
+                                    <input type="email" class="form-control" id="inputEmail2" placeholder="Email" required>
+                                    <small id="emailHelp" class="form-text">We'll never share your email address.</small>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please include your email
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName">Name <small>(for shipping label)</small></label>
+                                <input type="text" class="form-control" id="inputName" placeholder="First and Last" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please include your name
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress">Address</label>
+                                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please include your address
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress2">Address 2</label>
+                                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, suite, studio, or floor">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputCity">City</label>
+                                    <input type="text" class="form-control" id="inputCity" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please include your city
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputState">State</label>
+                                    <select id="inputState" class="form-control" required>
+                                        <option value="" selected>Choose...</option>
+                                        <option>CA</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please include your state
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputZip">Zip</label>
+                                    <input type="text" class="form-control" id="inputZip" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Zip code
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <h4>Billing Information:</h4>
+                            <input type="checkbox" name="autoFill"> <small>(Same As Shipping Address)</small>
+                            <div class="form-group">
+                                <label for="inputBillName">Name <small>(as it appears on card)</small></label>
+                                <input type="text" class="form-control" id="inputBillName" placeholder="First (MI) Last" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please include your name (as it appears on your card)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputBillAddress">Billing Address</label>
+                                <input type="text" class="form-control" id="inputBillAddress" placeholder="1234 Main St" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please include your address
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputBillAddress2">Billing Address 2</label>
+                                <input type="text" class="form-control" id="inputBillAddress2" placeholder="Apartment, suite, studio, or floor">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputBillCity">City</label>
+                                    <input type="text" class="form-control" id="inputBillCity" placeholder="City" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please include your city
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputBillState">State</label>
+                                    <select id="inputBillState" class="form-control" required>
+                                        <option value="" selected>Choose...</option>
+                                        <option>CA</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                        <option>...</option>
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please include your state
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputBillZip">Zip</label>
+                                    <input type="text" class="form-control" id="inputBillZip" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Zip code
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <h4>Credit Card Info:</h4>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck">
+                                    <label class="form-check-label" for="gridCheck">
+                                        Save this card on my acoount
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCardNum">Credit Card Number</label>
+                                <input type="text" class="form-control" id="inputCardNum" placeholder="1234567891011213" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please include your card number
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputSecNum">Card Security Number <small>(ccv)</small></label>
+                                    <input type="text" class="form-control" id="inputSecNum" placeholder="123" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please include your card security number
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputExpMonth">Exp. Month</label>
+                                    <select id="inputExpMonth" class="form-control" required>
+                                        <option value="" selected>Choose...</option>
+                                        <option>01 Jan</option>
+                                        <option>02 Feb</option>
+                                        <option>02 Mar</option>
+                                        <option>03 Apr</option>
+                                        <option>04 May</option>
+                                        <option>05 June</option>
+                                        <option>...</option>
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Expiration month
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="inputExpYear">Exp. Year</label>
+                                    <select id="inputExpYear" class="form-control" required>
+                                        <option value="" selected>Choose...</option>
+                                        <option>2018</option>
+                                        <option>2019</option>
+                                        <option>2020</option>
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>...</option>
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Expiration year
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck">
+                                    <label class="form-check-label" for="gridCheck">
+                                        Send me Lots of Ads!
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">Checkout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="fullOnTablet">
+        <div class="row">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="jim's_store_products.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="jim's_store_cart.html">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="jim's_store_login.html">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="jim's_store_contact_form.html">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+        <h6 class="row">Jim's Store Is On Social Media!</h6>
+        <div class="row">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="google.com"><img src="../static/store/pics/yelp.png" alt="icon"> Yelp</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="google.com"><img src="../static/store/pics/facebook.png" alt="icon"> Facebook</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="google.com"><img src="../static/store/pics/twitter.png" alt="icon"> Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="google.com"><img src="../static/store/pics/instagram.png" alt="icon"> Instagram</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="google.com"><img src="../static/store/pics/linkedin.png" alt="icon"> LinkedIn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="google.com"><img src="../static/store/pics/pinterest.png" alt="icon"> Pinterest</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+</body>
+
+</html>
