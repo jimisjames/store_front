@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^login_page$', views.login_page),
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
+    url(r'^add_to_cart/(?P<id>\d+)$', views.add_to_cart),
     url(r'^item_page/(?P<id>\d+)$', views.item_page),
     url(r'^new_product/$', views.new_product),
     url(r'^new_product/(?P<id>\d+)$', views.new_product),

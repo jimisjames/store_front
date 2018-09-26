@@ -71,9 +71,16 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/cart">Cart</a>
+                            <a class="nav-link" href="/cart">Cart ({{ request.session.cart_size }})</a>
                         </li>
-                        
+                        {% if 'user_name' in request.session %}
+                            <li>
+                                <a class="nav-link">{{ request.session.user_name }}</a>
+                            </li>
+                            <li>
+                                <a href="/logout" class="red nav-link">Log Out</a>
+                            </li>
+                        {% endif %}
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

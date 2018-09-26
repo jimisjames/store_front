@@ -108,7 +108,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     in_stock = models.BooleanField()
-    price = models.FloatField()
+    price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -120,9 +120,9 @@ class Photo(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Cart(models.Model):
-    user = models.OneToOneField(User, related_name="cart", on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product, related_name="carts")
-    quantiy = models.IntegerField()
+class CartItem(models.Model):
+    user = models.ForeignKey(User, related_name="cart_items", on_delete=models.CASCADE)
+    product_id = models.CharField(max_length=255)
+    quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -2,6 +2,10 @@
     outline: 0;
 }
 
+.ui-spinner {
+    width: 60px;
+}
+
 a {
     color: #212529;
 }
@@ -44,7 +48,6 @@ header {
     display: block;
     max-width: 100%;
     width: 100%;
-    border-radius: 0.3rem;
     padding: 0.4rem 0px .6rem;
 }
 
@@ -282,7 +285,7 @@ ul {
 }
 
 .mr-sm-2 {
-    border: 1px solid #212529;
+    border: 1px solid #2125293d;
 }
 
 .navbar {

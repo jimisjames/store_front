@@ -106,7 +106,7 @@
                 {% for product in products %}
                 <tr>
                     <td>{{ product.name }}</td>
-                    <td>${{ product.price }}</td>
+                    <td>${{ product.display }}</td>
                     <td>{{ product.in_stock }}</td>
                     <td>{{ product.created_at }}</td>
                     <td class="links">
@@ -132,7 +132,7 @@
                     <textarea name="description" class="form-control" id="description" cols="30" rows="6" placeholder="Description">{{ request.session.edit_description }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label for="price">Price <small>(number w/ decimal only, no $ sign)</small></label>
+                    <label for="price">Price: (number <span class="red">with two decimals</span>, no $ sign)</label>
                     <input type="float" class="form-control" name="price" id="price" placeholder="Price" value="{{ request.session.edit_price }}">
                 </div>
                 <button type="submit" class="btn btn-primary">Create/Update Product</button>

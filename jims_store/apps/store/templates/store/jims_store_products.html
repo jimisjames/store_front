@@ -71,12 +71,9 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/cart">Cart</a>
+                            <a class="nav-link" href="/cart">Cart ({{ request.session.cart_size }})</a>
                         </li>
                         {% if 'user_name' in request.session %}
-                            <li>
-                                <a class="nav-link">-</a>
-                            </li>
                             <li>
                                 <a class="nav-link">{{ request.session.user_name }}</a>
                             </li>
@@ -149,7 +146,7 @@
                     <a href="/item_page/{{ product.id }}">
                         <img class="iconStyle" src="{{ product.first_photo.image.url }}" alt="">
                     </a>
-                    <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.price }}</a>
+                    <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.display }}</a>
                 </div>
                 {% endfor %}
                 <div class="col-xs">

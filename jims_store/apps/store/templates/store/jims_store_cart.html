@@ -83,8 +83,16 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/cart">Cart</a>
+                            <a class="nav-link" href="/cart">Cart ({{ request.session.cart_size }})</a>
                         </li>
+                        {% if 'user_name' in request.session %}
+                            <li>
+                                <a class="nav-link">{{ request.session.user_name }}</a>
+                            </li>
+                            <li>
+                                <a href="/logout" class="red nav-link">Log Out</a>
+                            </li>
+                        {% endif %}
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -150,37 +158,21 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in users_cart %}
                             <tr>
-                                <td><a href="google.com">Some Product</a></td>
-                                <td>$23.50</td>
-                                <td>1</td>
-                                <td>$(p*qty)</td>
+                                <td><a href="/item_page/{{ item.product.id }}">{{ item.product.name }}</a></td>
+                                <td>${{ item.product.display }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>${{ item.total_in_dollars }}</td>
                             </tr>
-                            <tr>
-                                <td><a href="google.com">Some Other Product</a></td>
-                                <td>$80.00</td>
-                                <td>4</td>
-                                <td>$(^+p*qty)</td>
-                            </tr>
-                            <tr>
-                                <td><a href="google.com">Some Third Product</a></td>
-                                <td>$41.73</td>
-                                <td>1</td>
-                                <td>$(^+p*qty)</td>
-                            </tr>
-                            <tr>
-                                <td><a href="google.com">You guessed it, a Product</a></td>
-                                <td>$987.95</td>
-                                <td>17</td>
-                                <td>$(^+p*qty)</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
                 <div class="col-11">
-                    <h6>Pre-Tax Total: $^</h6>
-                    <h6>Tax: (^*.0925)%</h6>
-                    <h5>Total: $(total+tax)</h5>
+                    <h5>Pre-Tax: ${{ total_in_dollars }}</h5>
+                    <h6>Tax: ${{ tax_in_dollars }}</h6>
+                    <h3>Total: ${{ grand_total_in_dollars }}</h3>
                 </div>
 
             </div>
