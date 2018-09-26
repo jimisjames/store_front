@@ -1,5 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import *
+import datetime
+import os
+
+
+def practice(request):
+
+    return render(request, "store/practice.html")
+
 
 
 def home(request):
@@ -26,7 +34,7 @@ def view(request, id):
         "product" : product,
         "photos" : photos
     }
-    print(photos)
+
     return render(request, "store/gallery.html", context)
 
 
@@ -42,7 +50,17 @@ def contact(request):
 
 def products(request):
 
-    return render(request, "store/jims_store_products.html")
+    products = Product.objects.all()
+
+    for product in products:
+        if len(product.photos.all()):
+            product.first_photo = product.photos.all()[0]
+
+    context = {
+        "products" : products
+    }
+
+    return render(request, "store/jims_store_products.html", context)
 
 
 def login_page(request):
@@ -50,9 +68,17 @@ def login_page(request):
     return render(request, "store/jims_store_login.html")
 
 
-def item_page(request):
+def item_page(request, id):
 
-    return render(request, "store/jims_store_item_page.html")
+    product = Product.objects.get(id=id)
+    if product.photos.all():
+        product.first_photo = product.photos.all()[0]
+        product.pics = product.photos.all()[1:]
+
+    context = {
+        "product" : product
+    }
+    return render(request, "store/jims_store_item_page.html", context)
 
 
 def reg(request):
@@ -155,17 +181,70 @@ def in_stock(request, id):
 
 
 
-def new_product(request):
+def edit(request, id):
 
-    if len(request.POST["name"]) and len(request.POST["description"]):
-        Product.objects.create(name=request.POST["name"], description=request.POST["description"], in_stock=False)
+    product = Product.objects.get(id=id)
+    request.session["edit_name"] = product.name
+    request.session["edit_description"] = product.description
+    request.session["edit_price"] = product.price
+    request.session["edit_id"] = product.id
+
+    return redirect("/admin")
+
+
+def new_product(request, id=None):
+
+    if len(request.POST["name"]) and len(request.POST["description"]) and len(request.POST["price"]):
+        if id: 
+            request.session.pop("edit_name", None) 
+            request.session.pop("edit_description", None) 
+            request.session.pop("edit_price", None)  
+            request.session.pop("edit_id", None) 
+            x = Product.objects.get(id=id)
+            x.name = request.POST["name"]
+            x.description = request.POST["description"]
+            x.price = request.POST["price"]
+            x.save()
+        else:
+            Product.objects.create(name=request.POST["name"], description=request.POST["description"], in_stock=False, price=request.POST["price"])
 
     return redirect("/admin")
 
 
 def new_photo(request, id):
 
-    if len(request.POST["name"]):
-        Photo.objects.create(product=Product.objects.get(id=id), name=request.POST["name"])
+    if len(request.FILES):
+        name = id + str(datetime.datetime.now().microsecond) + ".jpg"
+        handle_uploaded_file(request.FILES['image'], name)
 
+        Photo.objects.create(product=Product.objects.get(id=id), image=name)
+
+    return redirect("/view/%s" % id)
+
+
+def delete_photo(request, id, product_id):
+
+    photo = Photo.objects.get(id=id)
+    _delete_file("media/"+str(photo.image))
+    photo.delete()
+
+    return redirect("/view/%s" % product_id)
+
+
+def handle_uploaded_file(file, filename):
+    with open('media/' + filename, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+
+def _delete_file(path):
+    if os.path.isfile(path):
+        os.remove(path)
+
+
+def clear(request):
+    request.session.pop("edit_name", None) 
+    request.session.pop("edit_description", None) 
+    request.session.pop("edit_price", None)  
+    request.session.pop("edit_id", None) 
     return redirect("/admin")

@@ -42,8 +42,7 @@
                 <h1>Jim's Store</h1>
             </div>
             <div class="col-3">
-                <a class="btn btn-info" href="/stats">View Stats</a>
-                <a class="btn btn-success" href="/wish">Make a wish!</a>
+                <a class="btn btn-warning" href="/">Back to Page</a>
             </div>
             <div class="col-1">
                 <a class="btn btn-danger" href="/logout">Log Out</a>
@@ -97,6 +96,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Price</th>
                     <th scope="col">In-Stock:</th>
                     <th scope="col">Date Added</th>
                     <th scope="col">Actions</th>
@@ -106,12 +106,14 @@
                 {% for product in products %}
                 <tr>
                     <td>{{ product.name }}</td>
+                    <td>${{ product.price }}</td>
                     <td>{{ product.in_stock }}</td>
                     <td>{{ product.created_at }}</td>
                     <td class="links">
                         <a class="btn btn-danger" href="/delete/product/{{ product.id }}">Remove</a>
-                        <a class="btn btn-primary" href="/in_stock/{{ product.id }}">Toggle In-Stock</a>
-                        <a class="btn btn-info" href="/view/{{ product.id }}">View</a>
+                        <a class="btn btn-info" href="/edit/{{ product.id }}">Edit</a>
+                        <a class="btn btn-primary" href="/in_stock/{{ product.id }}">In-Stock</a>
+                        <a class="btn btn-success" href="/view/{{ product.id }}">View</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -119,36 +121,22 @@
         </table>
         <div class="col-8">
             <h2>Add/Edit Products</h2>
-            <form action="/new_product" method="post">
+            <form action="/new_product/{{ request.session.edit_id }}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Name" value="">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Name" value="{{ request.session.edit_name }}">
                 </div>
-                {% if messages %}
-                    {% for message in messages %}
-                        {% if message.extra_tags == "wish" %}
-                            <ul>
-                                <li class="red">{{ message }}</li>
-                            </ul>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <input type="text" class="form-control" name="description" id="description" placeholder="Description" value="{{ wish.description }}{{ request.session.description }}">
+                    <textarea name="description" class="form-control" id="description" cols="30" rows="6" placeholder="Description">{{ request.session.edit_description }}</textarea>
                 </div>
-                {% if messages %}
-                    {% for message in messages %}
-                        {% if message.extra_tags == "description" %}
-                            <ul>
-                                <li class="red">{{ message }}</li>
-                            </ul>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                <div class="form-group">
+                    <label for="price">Price <small>(number w/ decimal only, no $ sign)</small></label>
+                    <input type="float" class="form-control" name="price" id="price" placeholder="Price" value="{{ request.session.edit_price }}">
+                </div>
                 <button type="submit" class="btn btn-primary">Create/Update Product</button>
-                <a class="btn btn-warning" href="/admin">Clear</a>
+                <a class="btn btn-warning" href="/clear">Clear</a>
             </form>
         </div>
     </div>

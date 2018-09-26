@@ -42,8 +42,7 @@
                 <h1>Jim's Store</h1>
             </div>
             <div class="col-3">
-                <a class="btn btn-info" href="/stats">View Stats</a>
-                <a class="btn btn-success" href="/wish">Make a wish!</a>
+                <a class="btn btn-warning" href="/admin">Back to Dashboard</a>
             </div>
             <div class="col-1">
                 <a class="btn btn-danger" href="/logout">Log Out</a>
@@ -64,7 +63,8 @@
         <div class="row">
             {% for photo in photos %}
                 <div class="col-3">
-                    <img class="thumbnail" src="../static/store/pics/{{ photo.name }}" alt="photo">
+                    <img class="pic" src='{{ photo.image.url }}' alt="photo">
+                    <a class="red" href="/delete/photo/{{ photo.id }}/{{ product.id }}">Delete</a>
                 </div>
             {% endfor %}
         </div>
@@ -83,15 +83,16 @@
             </div>
         </div>
         <div class="col-8">
-            <h2>Add Photo By Name:</h2>
-            <form action="/new_photo/{{ product.id }}" method="post">
+            <h2>Add Photo:</h2>
+            <form action="/new_photo/{{ product.id }}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="name">Photo Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Name" value="">
+                    <input type="file" name="image" id="image" accept="image/*">
                 </div>
-                <button type="submit" class="btn btn-primary">Create/Update Product</button>
+                <button type="submit" class="btn btn-primary">Add Photo</button>
             </form>
+            <br>
+            <a class="btn btn-warning" href="/admin">Back to Dashboard</a>
         </div>
     </div>
 </body>

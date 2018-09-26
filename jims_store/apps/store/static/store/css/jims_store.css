@@ -21,7 +21,6 @@ body {
     position: relative;
     height: 100%;
     padding-bottom: 1rem;
-    padding-top: 12rem;
 }
 
 footer {
@@ -46,12 +45,20 @@ header {
     max-width: 100%;
     width: 100%;
     border-radius: 0.3rem;
-    padding: 0.5rem 0px .9rem;
-    transition: all 0.3s ease-in-out;
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
+    padding: 0.4rem 0px .6rem;
+}
+
+#new_nav {
+    padding-top:3px;
+    padding-bottom:1px;
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
+#sticky {
+    position: -webkit-sticky;
+    position: sticky;
     top: 0;
-    position: fixed;
     z-index: 1;
 }
 
@@ -67,7 +74,7 @@ ul {
     background-color: #0e2f5a;
     margin-top: 1rem;
     border-radius: 5px;
-    border: 1px solid rgba(100, 100, 100, 0.514);
+    border: 1px solid rgba(100, 100, 100, 0.329);
     display: flex;
     justify-content: center;
     -webkit-box-shadow: 0px 0px 26px 4px rgba(0,0,0,1);
@@ -118,6 +125,26 @@ ul {
 
 .carousel-inner {
     height: 450px;
+}
+
+.carousel-item {
+    background-image: url("../pics/no_image_available.jpeg");
+    background-size: 250px;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 250px;
+}
+
+.carousel-control-next-icon {
+    background-image: url("../pics/arrow.png");
+    -webkit-transform: rotate(40deg);
+    transform: rotate(40deg);
+}
+
+.carousel-control-prev-icon {
+    background-image: url("../pics/arrow.png");
+    -webkit-transform: rotate(225deg);
+    transform: rotate(225deg);
 }
 
 .center {
@@ -207,7 +234,11 @@ ul {
     border-top-right-radius: .2rem;
     border-top-left-radius: .2rem;
     width: 200px;
+    min-height: 200px;
     transition: all .2s ease-in-out;
+    background-image: url("../pics/no_image_available.jpeg");
+    background-size: 200px, 200px;
+    display: flex;
 }
 
 .iconStyle:hover {
@@ -221,7 +252,6 @@ ul {
     border-radius: 0;
     padding: 1rem 0 1.5rem 0;
     margin-bottom: 0;
-    margin-top: -192px;
 }
 
 .jumbotron h1 {

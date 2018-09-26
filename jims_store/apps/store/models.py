@@ -11,11 +11,6 @@ class Manager(models.Manager):
         errors = {}
         emailRegEx = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
-        print("*******************************")
-        print(data)
-        print("*******************************")
-
-
         if len(data["email"]) < 1:
             errors["email"] = "Please enter an Email Address"
         elif not emailRegEx.match(data["email"]):
@@ -113,19 +108,21 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     in_stock = models.BooleanField()
+    price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
 class Photo(models.Model):
     product = models.ForeignKey(Product, related_name="photos", on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='media')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
 class Cart(models.Model):
     user = models.OneToOneField(User, related_name="cart", on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, related_name="carts")
+    product = models.ManyToManyField(Product, related_name="carts")
+    quantiy = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -12,11 +12,17 @@ header {
     margin: auto;
     align-items: center;
 }
+
 .main {
     max-width: 1000px;
     padding: 15px 25px;
     background-color: rgb(196, 196, 196);
     margin: auto;
+}
+
+.pic {
+    width: 200px;
+    margin: 5px; 
 }
 
 .red {

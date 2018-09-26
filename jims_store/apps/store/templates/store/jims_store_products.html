@@ -27,17 +27,6 @@
 
         $(document).ready(function () {
 
-            var navbar = document.getElementById("navbar");
-            console.log($(document))
-            window.onscroll = function () {
-                if ($(document).scrollTop() > 30) {
-                    navbar.classList.add("shrink")
-                    $("#title").hide("blind", 1000);
-                } else {
-                    navbar.classList.remove("shrink");
-                    $("#title").show("blind", 500);
-                }
-            }
         });
 
     </script>
@@ -45,9 +34,13 @@
 </head>
 
 <body>
-    <header id="navbar">
-        <div class="container">
-            <h1 id="title">Jim's Store</h1>
+    <header>
+        <div id="new_nav" class="container">
+            <h1>Jim's Store</h1>
+        </div>
+    </header>
+    <header id="sticky" id="navbar">
+        <div id="new_nav" class="container">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="/">
                     <img src="../static/store/pics/tent.png" alt="Tent Pic">
@@ -151,12 +144,14 @@
                 </div>
             </div>
             <div class="row">
+                {% for product in products %}
                 <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
+                    <a href="/item_page/{{ product.id }}">
+                        <img class="iconStyle" src="{{ product.first_photo.image.url }}" alt="">
                     </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
+                    <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.price }}</a>
                 </div>
+                {% endfor %}
                 <div class="col-xs">
                     <a href="/item_page">
                         <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
@@ -250,13 +245,13 @@
             </div>
             <div class="row">
                 <div id="pages">
-                    <a href="google.com">&#171; Previous</a>
-                    <a href="google.com">1</a>
-                    <a href="google.com">2</a>
-                    <a href="google.com">3</a>
-                    <a href="google.com">4</a>
-                    <a href="google.com">5</a>
-                    <a href="google.com">Next &#187;</a>
+                    <a href="#">&#171; Previous</a>
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#">Next &#187;</a>
                 </div>
             </div>
         </div>
