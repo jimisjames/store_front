@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 import datetime
 import os
-
+import copy
 
 
 
@@ -49,8 +49,8 @@ def cart(request):
             return render(request, "store/jims_store_cart.html")
 
         total = 0
-        print(request.session["cart"])
-        users_cart = request.session["cart"]
+        
+        users_cart = copy.deepcopy(request.session["cart"])
         for item in users_cart:
             item["product"] = Product.objects.get(id=item["product_id"])
             item["product"].display = item["product"].price / 100.0
@@ -62,8 +62,12 @@ def cart(request):
         tax_in_dollars = tax / 100.0
         grand_total = total + tax
         grand_total_in_dollars = grand_total / 100.0
+        
+        total = str(total)
+        total = total[:-2] + "." + total[-2:]
 
         context = {
+            "total" : total,
             "users_cart" : users_cart,
             "total_in_dollars" : total_in_dollars,
             "grand_total_in_dollars" : grand_total_in_dollars,
@@ -87,11 +91,15 @@ def cart(request):
         grand_total_in_dollars = grand_total / 100.0
 
         context = {
+            "total" : total,
             "users_cart" : users_cart,
             "total_in_dollars" : total_in_dollars,
             "grand_total_in_dollars" : grand_total_in_dollars,
             "tax_in_dollars" : tax_in_dollars,
         }
+
+    if "user_id" in request.session.keys():
+        request.session["show"] = "show"
 
     return render(request, "store/jims_store_cart.html", context)
 
@@ -167,7 +175,7 @@ def reg(request):
         return redirect("/products")    # success
 
 
-def login(request):
+def login(request, checkout=False):
     
     result = User.objects.validate_login(request.POST)
     errors = result[0]
@@ -176,7 +184,10 @@ def login(request):
         for val in errors:
             messages.warning(request, val)
             request.session["email"] = request.POST["email"]
-        return redirect("/login_page")    # failure
+        if checkout:
+            return redirect("/cart")
+        else:
+            return redirect("/login_page")    # failure
     else:
         request.session["user_id"] = user.id
         request.session["user_name"] = user.first_name + " " + user.last_name
@@ -200,7 +211,10 @@ def login(request):
         if user.level == 9:
             return redirect("/admin")
         else:
-            return redirect("/products")    # success
+            if checkout:
+                return redirect("/cart")
+            else:
+                return redirect("/products")    # success
 
 
 def logout(request):
@@ -237,9 +251,7 @@ def add_to_cart(request, id):
         in_cart = False
         for item in request.session["cart"]:
             if item["product_id"] == id:
-                print(item["product_id"])
                 in_cart = True
-                print(int(request.POST["quantity"]))
                 item["quantity"] += int(request.POST["quantity"])
 
         if not in_cart:
@@ -249,7 +261,6 @@ def add_to_cart(request, id):
             }
             request.session["cart"].append(context)
             request.session["cart_size"] += 1
-        print(request.session["cart"])
     
     else:
         in_cart = False
@@ -270,6 +281,24 @@ def add_to_cart(request, id):
             request.session["cart_size"] += 1
 
     return redirect("/item_page/%s" % id)
+
+
+def remove_item(request, id):
+    
+    if "user_id" in request.session.keys():
+        cart_item = CartItem.objects.get(user=User.objects.get(id=request.session["user_id"]), product_id = id)
+        cart_item.delete()
+    else:
+        x = []
+        for item in request.session["cart"]:
+            if item["product_id"] != id:
+                x.append(item)
+
+        request.session["cart"] = x
+        request.session["cart_size"] -= 1
+
+    return redirect("/cart")
+
 
 
 def level(request, id):
@@ -370,3 +399,38 @@ def clear(request):
     request.session.pop("edit_price", None)  
     request.session.pop("edit_id", None) 
     return redirect("/admin")
+
+
+def checkout(request):
+
+    errors = User.objects.validate_checkout(request.POST)
+
+    if len(errors):
+        for key, val in errors.items():
+            messages.info(request, val, extra_tags=key)
+        request.session["email"] = request.POST["email"]
+        request.session["name"] = request.POST["name"]
+        request.session["address"] = request.POST["address"]
+        request.session["address2"] = request.POST["address2"]
+        request.session["city"] = request.POST["city"]
+        request.session["state"] = request.POST["state"]
+        request.session["zip"] = request.POST["zip"]
+        request.session["show"] = "show"
+
+        return redirect("/cart")    #failure
+
+    if not "user_id" in request.session.keys():
+        if not "cart" in request.session.keys():
+            request.session["email"] = request.POST["email"]
+            request.session["name"] = request.POST["name"]
+            request.session["address"] = request.POST["address"]
+            request.session["address2"] = request.POST["address2"]
+            request.session["city"] = request.POST["city"]
+            request.session["state"] = request.POST["state"]
+            request.session["zip"] = request.POST["zip"]
+            request.session["show"] = "show"
+            messages.info(request, "There are no items in your cart!", extra_tags="address3")
+            return redirect("/cart")    #failure
+        else:
+            request.session["paypal"] = "paypal"
+            

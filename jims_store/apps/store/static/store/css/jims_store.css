@@ -232,6 +232,10 @@ ul {
     margin-bottom: .6rem;
 }
 
+.hidden {
+    display: none;
+}
+
 .iconStyle {
     border: 1px solid #212529;
     border-top-right-radius: .2rem;
@@ -279,6 +283,10 @@ ul {
     margin: 0;
 }
 
+.links {
+    padding: 5px!important;
+}
+
 .my-sm-0 {
     color: rgba(0, 0, 0, 0.75);
     border-width: 3px;
@@ -302,6 +310,18 @@ ul {
 
 .navbar img {
     width: 50px;
+}
+
+.paypal {
+    display: inline-block!important;
+    position: fixed;
+    top: 200px;
+    left: 200px;
+    height: 400px;
+    width: 400px;
+    background-color: #969899;
+    border: 1px solid rgba(128, 128, 128, 0.555);
+    border-radius: 5px;
 }
 
 .priceTag {

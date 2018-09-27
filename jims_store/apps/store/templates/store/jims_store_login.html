@@ -276,7 +276,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="state">State <small>(abv)</small></label>
-                                    <input type="text" class="form-control" name="state" id="state" placeholder="(abv)" value="{{ request.session.state }}">
+                                    <input type="text" class="form-control" name="state" id="state" placeholder="St" value="{{ request.session.state }}">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="zip">Zip</label>
@@ -292,6 +292,7 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
+                            <input type="hidden" name="total" value="">
                             <button type="submit" class="btn btn-primary">Register</button>
                         </form>
                     </div>

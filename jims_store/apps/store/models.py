@@ -80,6 +80,32 @@ class Manager(models.Manager):
 
         return [errors, user]
 
+    def validate_checkout(self, data):
+        errors = {}
+        emailRegEx = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+
+        if len(data["email"]) < 1:
+            errors["email"] = "Please enter an Email Address"
+        elif not emailRegEx.match(data["email"]):
+            errors["email"] = "You must enter a valid Email Address"
+
+        if len(data["name"]) < 1:
+            errors["name"] = "Please enter a name for the shipping label"
+
+        if len(data["address"]) < 1:
+            errors["address"] = "Please enter an address"
+
+        if len(data["city"]) < 1:
+            errors["address3"] = "Please enter an city"
+        elif len(data["state"]) != 2:
+            errors["address3"] = "Please enter a valid state abbreviation"
+        elif len(data["zip"]) < 5:
+            errors["address3"] = "Please enter a zip code"
+        elif not data["zip"].isnumeric():
+            errors["address3"] = "Please enter a valid zip code, numbers only"
+
+        return errors
+
 
 
 class User(models.Model):
@@ -124,5 +150,22 @@ class CartItem(models.Model):
     user = models.ForeignKey(User, related_name="cart_items", on_delete=models.CASCADE)
     product_id = models.CharField(max_length=255)
     quantity = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, related_name="orders", on_delete=models.CASCADE)
+    order_id = models.CharField(max_length=255)
+    product_id = models.CharField(max_length=255)
+    product_price = models.CharField(max_length=255)
+    quantity = models.IntegerField()
+    pre_tax = models.IntegerField()
+    tax = models.IntegerField()
+    total = models.IntegerField()
+    order_total = models.IntegerField()
+    status = models.CharField(max_length=255)
+    ship_to = models.CharField(max_length=255)
+    date_ordered = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

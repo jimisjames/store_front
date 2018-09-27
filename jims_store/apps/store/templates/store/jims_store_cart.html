@@ -18,27 +18,69 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'store/css/jims_store.css' %}">
 
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-    <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/start/jquery-ui.css'>
-    <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
-    <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
-
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
     <script>
 
         $(document).ready(function () {
 
-            var forms = document.getElementsByClassName('needs-validation');
+            // Render the PayPal button
+            paypal.Button.render({
+            // Set your environment
+            env: 'sandbox', // sandbox | production
 
-            var validation = Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
+            // Specify the style of the button
+            style: {
+            layout: 'vertical',  // horizontal | vertical
+            size:   'medium',    // medium | large | responsive
+            shape:  'rect',      // pill | rect
+            color:  'gold'       // gold | blue | silver | white | black
+            },
+
+            // Specify allowed and disallowed funding sources
+            //
+            // Options:
+            // - paypal.FUNDING.CARD
+            // - paypal.FUNDING.CREDIT
+            // - paypal.FUNDING.ELV
+            funding: {
+            allowed: [
+                paypal.FUNDING.CARD,
+                paypal.FUNDING.CREDIT
+            ],
+            disallowed: []
+            },
+
+            // PayPal Client IDs - replace with your own
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+            sandbox: 'AQheL0ubQfwSEwI25gr-AuyOEGp8yFT65ro-LwI_VETsBsTGvIUwLzpk6Vxfxs8XJHA8yQfO9TgkQv3j',
+            production: 'AWWQS8i0rfVKYHNtUI6NgN3Vxc8UOvt_PfZtmxP1kz7s-Hd2lD6bkvCBvRCpJbyb9_aYwKElFmNqWvCa'
+            },
+
+            payment: function (data, actions) {
+            return actions.payment.create({
+                payment: {
+                transactions: [
+                    {
+                    amount: {
+                        total: '{{ total }}',
+                        currency: 'USD'
                     }
-                    form.classList.add('was-validated');
-                }, false);
+                    }
+                ]
+                }
             });
+            },
 
+            onAuthorize: function (data, actions) {
+            return actions.payment.execute()
+                .then(function () {
+
+                window.alert('Payment Complete!');
+
+                });
+            }
+            }, '#paypal-button');
         });
 
     </script>
@@ -155,6 +197,7 @@
                                 <th scope="col">Price</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Total</th>
+                                <th scope="col">Remove From Cart</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -164,6 +207,9 @@
                                 <td>${{ item.product.display }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>${{ item.total_in_dollars }}</td>
+                                <td class="links">
+                                    <a class="btn btn-danger" href="/remove/item/{{ item.product.id }}">Remove</a>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -185,258 +231,119 @@
                 </div>
             </div>
             <div class="row grayBackground">
+                {% if not "user_id" in request.session.keys %}
                 <div class="row center">
-                    <form>
+                    <form action="/login/checkout" method="post">
+                        {% csrf_token %}
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputEmail4">Email</label>
-                                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="inputPassword4">Password</label>
-                                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
                             </div>
                         </div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.level == 30 %}
+                                    <ul>
+                                        <li class="red">{{ message }}</li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <input type="submit" class="btn btn-primary" value="Log In">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            Continue as Guest
+                        </button>
                     </form>
-                    <button type="submit" class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
-                        aria-controls="collapseExample">
-                        Log In
-                    </button>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
-                        aria-controls="collapseExample">
-                        Continue as Guest
-                    </button>
                 </div>
-                <div class="collapse" id="collapseExample">
+                {% endif %}
+                <div class="collapse {{ request.session.show }}" id="collapseExample">
                     <div class="card card-body">
-                        <form class="needs-validation" novalidate>
+                        <form action="/checkout" method="post">
+                            {% csrf_token %}
                             <h4>Shipping Information:</h4>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail2">Email</label>
-                                    <input type="email" class="form-control" id="inputEmail2" placeholder="Email" required>
+                                    <input type="text" class="form-control" name="email" id="inputEmail2" placeholder="Email" value="{{ request.session.email }}">
                                     <small id="emailHelp" class="form-text">We'll never share your email address.</small>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please include your email
-                                    </div>
                                 </div>
                             </div>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "email" %}
+                                        <ul>
+                                            <li class="red">{{ message }}</li>
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             <div class="form-group">
                                 <label for="inputName">Name <small>(for shipping label)</small></label>
-                                <input type="text" class="form-control" id="inputName" placeholder="First and Last" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please include your name
-                                </div>
+                                <input type="text" class="form-control" name="name" id="inputName" placeholder="First and Last" value="{{ request.session.name }}">
                             </div>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "name" %}
+                                        <ul>
+                                            <li class="red">{{ message }}</li>
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             <div class="form-group">
-                                <label for="inputAddress">Address</label>
-                                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please include your address
-                                </div>
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" value="{{ request.session.address }}">
                             </div>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "address" %}
+                                        <ul>
+                                            <li class="red">{{ message }}</li>
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             <div class="form-group">
-                                <label for="inputAddress2">Address 2</label>
-                                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, suite, studio, or floor">
+                                <label for="address2">Address 2</label>
+                                <input type="text" class="form-control" name="address2" id="address2" placeholder="Apartment, suite, studio, or floor" value="{{ request.session.address2 }}">
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">City</label>
-                                    <input type="text" class="form-control" id="inputCity" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please include your city
-                                    </div>
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" name="city" id="city" placeholder="City" value="{{ request.session.city }}">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="inputState">State</label>
-                                    <select id="inputState" class="form-control" required>
-                                        <option value="" selected>Choose...</option>
-                                        <option>CA</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                    </select>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please include your state
-                                    </div>
+                                    <label for="state">State <small>(abv)</small></label>
+                                    <input type="text" class="form-control" name="state" id="state" placeholder="St" value="{{ request.session.state }}">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="inputZip">Zip</label>
-                                    <input type="text" class="form-control" id="inputZip" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Zip code
-                                    </div>
+                                    <label for="zip">Zip</label>
+                                    <input type="text" class="form-control" name="zip" id="zip" placeholder="12345" value="{{ request.session.zip }}">
                                 </div>
                             </div>
-                            <br>
-                            <h4>Billing Information:</h4>
-                            <input type="checkbox" name="autoFill"> <small>(Same As Shipping Address)</small>
-                            <div class="form-group">
-                                <label for="inputBillName">Name <small>(as it appears on card)</small></label>
-                                <input type="text" class="form-control" id="inputBillName" placeholder="First (MI) Last" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please include your name (as it appears on your card)
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputBillAddress">Billing Address</label>
-                                <input type="text" class="form-control" id="inputBillAddress" placeholder="1234 Main St" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please include your address
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputBillAddress2">Billing Address 2</label>
-                                <input type="text" class="form-control" id="inputBillAddress2" placeholder="Apartment, suite, studio, or floor">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputBillCity">City</label>
-                                    <input type="text" class="form-control" id="inputBillCity" placeholder="City" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please include your city
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="inputBillState">State</label>
-                                    <select id="inputBillState" class="form-control" required>
-                                        <option value="" selected>Choose...</option>
-                                        <option>CA</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                        <option>...</option>
-                                    </select>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please include your state
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label for="inputBillZip">Zip</label>
-                                    <input type="text" class="form-control" id="inputBillZip" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Zip code
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <h4>Credit Card Info:</h4>
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                                    <label class="form-check-label" for="gridCheck">
-                                        Save this card on my acoount
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputCardNum">Credit Card Number</label>
-                                <input type="text" class="form-control" id="inputCardNum" placeholder="1234567891011213" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please include your card number
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputSecNum">Card Security Number <small>(ccv)</small></label>
-                                    <input type="text" class="form-control" id="inputSecNum" placeholder="123" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please include your card security number
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="inputExpMonth">Exp. Month</label>
-                                    <select id="inputExpMonth" class="form-control" required>
-                                        <option value="" selected>Choose...</option>
-                                        <option>01 Jan</option>
-                                        <option>02 Feb</option>
-                                        <option>02 Mar</option>
-                                        <option>03 Apr</option>
-                                        <option>04 May</option>
-                                        <option>05 June</option>
-                                        <option>...</option>
-                                    </select>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Expiration month
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="inputExpYear">Exp. Year</label>
-                                    <select id="inputExpYear" class="form-control" required>
-                                        <option value="" selected>Choose...</option>
-                                        <option>2018</option>
-                                        <option>2019</option>
-                                        <option>2020</option>
-                                        <option>2021</option>
-                                        <option>2022</option>
-                                        <option>2023</option>
-                                        <option>...</option>
-                                    </select>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Expiration year
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                                    <label class="form-check-label" for="gridCheck">
-                                        Send me Lots of Ads!
-                                    </label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success">Checkout</button>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "address3" %}
+                                        <ul>
+                                            <li class="red">{{ message }}</li>
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <p>Clicking checkout will prompt a PayPal pop-up that takes all major Credit Cards.</p>
+                            <p>Your order is logged when place it but will not ship if payment is not verified.</p>
+                            <p>For issues with proccessing payments please email us after you place your order.</p>
+                            <button type="submit" class="btn btn-success">Checkout With PayPal</button>
                         </form>
+                        <div class="hidden {{ request.session.paypal }}">
+                            <div id="paypal-button"></div>
+                        </div>
                     </div>
                 </div>
             </div>
