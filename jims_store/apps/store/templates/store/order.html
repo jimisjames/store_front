@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Jim's Store ADMIN</title>
+
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO'
+        crossorigin='anonymous'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49'
+        crossorigin='anonymous'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy'
+        crossorigin='anonymous'></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    {% load static %}
+    <link rel='stylesheet' href='{% static "store/css/index.css" %}'>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+        })
+
+    </script>
+
+</head>
+
+<body>
+    <header>
+        <div class="row center">
+            <div class="col-7">
+                <h1>Jim's Store</h1>
+            </div>
+            <div class="col-3">
+                <a class="btn btn-warning" href="/admin">Back to Dashboard</a>
+            </div>
+            <div class="col-1">
+                <a class="btn btn-danger" href="/logout">Log Out</a>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <div class="row">
+            <div class="col space" id="banner">
+                <h1>Hello {{ request.session.user_name }}!</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <h2>Order ID: {{ order_info.order_id }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5>User ID: {{ order_info.user }}</h5>
+                <h5>Email: {{ order_info.user_email }}</h5>
+                <h5>Status: {{ order_info.status }}</h5>
+            </div>
+            <div class="col">
+                <h5>Order Total: ${{ order_info.order_total }}</h5>
+                <h5>Date Ordered: {{ order_info.created_at }}</h5>
+                <h5>Shipping Address: {{ order_info.ship_to }}</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form action="/status/{{ order_info.order_id }}" method="post">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <input class="form-control" type="text" id="status" name="status" placeholder="Update Status: {{ order_info.status }}">
+                        </div>
+                        <div class="form-group col">
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Qty.</th>
+                    <th scope="col">Line Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in order_lines %}
+                <tr>
+                    <td>{{ line.product_name }}</td>
+                    <td>${{ line.product_price }}</td>
+                    <td>{{ line.quantity }}</td>
+                    <td>${{ line.pre_tax_product_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-danger" href="/delete/order/{{ order_info.order_id }}">Delete Order Permanently</a>
+    </div>
+</body>
+
+</html>

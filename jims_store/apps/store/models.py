@@ -154,18 +154,18 @@ class CartItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Order(models.Model):
-    user = models.ForeignKey(User, related_name="orders", on_delete=models.CASCADE)
+class OrderLine(models.Model):
+    user = models.ForeignKey(User, related_name="orders", on_delete=models.CASCADE, blank=True, null=True)
+    user_email = models.CharField(max_length=255)
     order_id = models.CharField(max_length=255)
     product_id = models.CharField(max_length=255)
-    product_price = models.CharField(max_length=255)
+    product_name = models.CharField(max_length=255)
+    product_price = models.IntegerField()
     quantity = models.IntegerField()
-    pre_tax = models.IntegerField()
-    tax = models.IntegerField()
-    total = models.IntegerField()
+    pre_tax_product_total = models.IntegerField()
+    pre_tax_order_total = models.IntegerField()
     order_total = models.IntegerField()
     status = models.CharField(max_length=255)
-    ship_to = models.CharField(max_length=255)
-    date_ordered = models.DateTimeField(auto_now_add=True)
+    ship_to = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -60,54 +60,14 @@
         </div>
         <div class="recomendations">
             <div class="row">
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpege" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
+                {% for product in products %}
+                    <div class="col-xs">
+                        <a href="/item_page/{{ product.id }}">
+                            <img class="iconStyle" src="{{ product.first_photo.image.url }}" alt="">
+                        </a>
+                        <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.display }}</a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -118,54 +78,14 @@
         </div>
         <div class="recomendations">
             <div class="row">
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
+                {% for product in products %}
+                    <div class="col-xs">
+                        <a href="/item_page/{{ product.id }}">
+                            <img class="iconStyle" src="{{ product.first_photo.image.url }}" alt="">
+                        </a>
+                        <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.display }}</a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -176,54 +96,14 @@
         </div>
         <div class="recomendations">
             <div class="row">
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="/item_page">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="/item_page">Some Product</a>
-                </div>
+                {% for product in products %}
+                    <div class="col-xs">
+                        <a href="/item_page/{{ product.id }}">
+                            <img class="iconStyle" src="{{ product.first_photo.image.url }}" alt="">
+                        </a>
+                        <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.display }}</a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -231,13 +111,13 @@
         <div class="row">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="/products">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/cart">Cart</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Log In</a>
+                    <a class="nav-link" href="/login_page">Log In</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/contact">Contact Us</a>
@@ -248,22 +128,22 @@
         <div class="row">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/yelp.png" alt="icon"> Yelp</a>
+                    <a class="nav-link" href="//yelp.com"><img src="../static/store/pics/yelp.png" alt="icon"> Yelp</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/facebook.png" alt="icon"> Facebook</a>
+                    <a class="nav-link" href="//facebook.com"><img src="../static/store/pics/facebook.png" alt="icon"> Facebook</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/twitter.png" alt="icon"> Twitter</a>
+                    <a class="nav-link" href="//twitter.com"><img src="../static/store/pics/twitter.png" alt="icon"> Twitter</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/instagram.png" alt="icon"> Instagram</a>
+                    <a class="nav-link" href="//instagram.com"><img src="../static/store/pics/instagram.png" alt="icon"> Instagram</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/linkedin.png" alt="icon"> LinkedIn</a>
+                    <a class="nav-link" href="//linkedin.com"><img src="../static/store/pics/linkedin.png" alt="icon"> LinkedIn</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/pinterest.png" alt="icon"> Pinterest</a>
+                    <a class="nav-link" href="//pinterest.com"><img src="../static/store/pics/pinterest.png" alt="icon"> Pinterest</a>
                 </li>
             </ul>
         </div>

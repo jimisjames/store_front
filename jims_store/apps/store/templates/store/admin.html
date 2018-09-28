@@ -57,6 +57,37 @@
         </div>
         <div class="row">
             <div class="col-10">
+                <h2>Orders</h2>
+            </div>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Buyer's Email</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Date Ordered</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.user_email }}</td>
+                    <td>${{ order.order_total }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at }}</td>
+                    <td class="links">
+                        <a class="btn btn-primary" href="/view/order/{{ order.order_id }}">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-10">
                 <h2>Users</h2>
             </div>
         </div>
@@ -71,7 +102,6 @@
                 </tr>
             </thead>
             <tbody>
-                
                 {% for user in users %}
                 <tr>
                     <td>{{ user.first_name }} {{ user.last_name }}</td>
@@ -88,7 +118,6 @@
                     </td>
                 </tr>
                 {% endfor %}
-               
             </tbody>
         </table>
         <h3>Products</h3>

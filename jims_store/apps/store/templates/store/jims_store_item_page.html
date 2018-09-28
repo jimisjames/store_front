@@ -85,8 +85,9 @@
                             </li>
                         {% endif %}
                     </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <form  action="/products/search" method="post" class="form-inline my-2 my-lg-0">
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
                 </div>
@@ -97,7 +98,15 @@
         <div class="sideWidth">
             <div class="sideBar notOnTablet grayBackground">
                 <h6>What are you looking for?</h6>
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <form action="/products/search" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-success" type="submit" value="Search">
+                    </div>
+                </form>
                 <h6>Filter Search by Catagory:</h6>
                 <form class="searchForm" action="#">
                     <input type="checkbox" name="tents"> Tents<br>
@@ -189,54 +198,14 @@
         </div>
         <div class="recomendations">
             <div class="row">
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
-                <div class="col-xs">
-                    <a href="jim's_product_page.html">
-                        <img class="iconStyle" src="../static/store/pics/no_image_available.jpeg" alt="No Image">
-                    </a>
-                    <a class="productLink" href="jim's_product_page.html">Some Product</a>
-                </div>
+                {% for product in products %}
+                    <div class="col-xs">
+                        <a href="/item_page/{{ product.id }}">
+                            <img class="iconStyle" src="{{ product.first_photo.image.url }}" alt="">
+                        </a>
+                        <a class="productLink" href="/item_page/{{ product.id }}">{{ product.name }} ${{ product.display }}</a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -244,16 +213,16 @@
         <div class="row">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="jim's_store_products.html">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="jim's_store_cart.html">Cart</a>
+                    <a class="nav-link" href="/cart">Cart</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="jim's_store_login.html">Log In</a>
+                    <a class="nav-link" href="/login_page">Log In</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="jim's_store_contact_form.html">Contact Us</a>
+                    <a class="nav-link" href="/contact">Contact Us</a>
                 </li>
             </ul>
         </div>
@@ -261,22 +230,22 @@
         <div class="row">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/yelp.png" alt="icon"> Yelp</a>
+                    <a class="nav-link" href="//yelp.com"><img src="../static/store/pics/yelp.png" alt="icon"> Yelp</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/facebook.png" alt="icon"> Facebook</a>
+                    <a class="nav-link" href="//facebook.com"><img src="../static/store/pics/facebook.png" alt="icon"> Facebook</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/twitter.png" alt="icon"> Twitter</a>
+                    <a class="nav-link" href="//twitter.com"><img src="../static/store/pics/twitter.png" alt="icon"> Twitter</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/instagram.png" alt="icon"> Instagram</a>
+                    <a class="nav-link" href="//instagram.com"><img src="../static/store/pics/instagram.png" alt="icon"> Instagram</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/linkedin.png" alt="icon"> LinkedIn</a>
+                    <a class="nav-link" href="//linkedin.com"><img src="../static/store/pics/linkedin.png" alt="icon"> LinkedIn</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="google.com"><img src="../static/store/pics/pinterest.png" alt="icon"> Pinterest</a>
+                    <a class="nav-link" href="//pinterest.com"><img src="../static/store/pics/pinterest.png" alt="icon"> Pinterest</a>
                 </li>
             </ul>
         </div>

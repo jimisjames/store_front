@@ -232,6 +232,14 @@ ul {
     margin-bottom: .6rem;
 }
 
+.green {
+    color: rgb(2, 138, 2);
+    background-color: #f0f0f0a2;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 3px;
+}
+
 .hidden {
     display: none;
 }
@@ -316,12 +324,18 @@ ul {
     display: inline-block!important;
     position: fixed;
     top: 200px;
-    left: 200px;
-    height: 400px;
-    width: 400px;
-    background-color: #969899;
-    border: 1px solid rgba(128, 128, 128, 0.555);
+    left: 50%;
+    transform: translateX(-50%);
+    height: 450px;
+    width: 900px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid rgba(128, 128, 128, 0.466);
     border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.65);
+    -moz-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.65);
+    box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.65);
+    text-align: center;
 }
 
 .priceTag {
@@ -350,6 +364,10 @@ ul {
 .recomendations {
     overflow-x: scroll;
     align-items: flex-end;
+}
+
+.recomendations .iconStyle {
+    max-height: 200px;
 }
 
 .recomendations .row {
@@ -404,6 +422,10 @@ ul {
 
 .sideBar p {
     margin: 0;
+}
+
+.space {
+    margin-bottom: 30px;
 }
 
 .table {
