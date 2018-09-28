@@ -498,6 +498,17 @@ def new_photo(request, id):
     return redirect("/view/%s" % id)
 
 
+def handle_uploaded_file(file, filename):
+    with open('media/' + filename, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+
+def _delete_file(path):
+    if os.path.isfile(path):
+        os.remove(path)
+
+
 def delete_photo(request, id, product_id):
 
     if not "user_level" in request.session.keys() or request.session["user_level"] != 9:
@@ -508,17 +519,6 @@ def delete_photo(request, id, product_id):
     photo.delete()
 
     return redirect("/view/%s" % product_id)
-
-
-def handle_uploaded_file(file, filename):
-    with open('media/' + filename, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-
-
-def _delete_file(path):
-    if os.path.isfile(path):
-        os.remove(path)
 
 
 def clear(request):
